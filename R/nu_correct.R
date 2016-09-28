@@ -7,7 +7,7 @@
 #' @param verbose print diagnostic messages
 #' @param ... additional arguments passed to \code{\link{fs_cmd}}.
 #' @return Object of class nifti depending on \code{retimg}
-#' @importFrom fslr parse_img_ext
+#' @importFrom neurobase parse_img_ext
 #' @export
 #' @examples \dontrun{
 #' if (have_fs()){
@@ -22,7 +22,7 @@ nu_correct = function(
   ...){
   
   file = checkimg(file)
-  ext = fslr::parse_img_ext(file)
+  ext = neurobase::parse_img_ext(file)
   infile = file
   if (ext %in% c("nii", "nii.gz")) {
     infile = nii2mnc(file)
@@ -33,7 +33,7 @@ nu_correct = function(
   # no.outfile = TRUE
   # }
   
-  out_ext = fslr::parse_img_ext(outfile)
+  out_ext = neurobase::parse_img_ext(outfile)
   if ( !(ext %in% c("nii", "mnc"))) {
     stop("outfile extension must be nii/nii.gz or mnc")
   }
@@ -56,6 +56,7 @@ nu_correct = function(
     samefile = FALSE,
     add_ext = FALSE,
     verbose = verbose,
+    bin_app = "mni/bin",
     ...)
   if (out_ext == "nii") {
     outfile = mnc2nii(tmpfile, outfile = outfile)
@@ -73,5 +74,5 @@ nu_correct = function(
 #' @return Result of \code{fs_help}
 #' @export
 nu_correct.help = function(){
-  fs_help(func_name = "nu_correct", help.arg = "-help")
+  fs_help(func_name = "nu_correct", help.arg = "-help", bin_app = "mni/bin")
 }

@@ -14,7 +14,7 @@
 #' @export
 reconner <- function(
   infile,
-  outdir,
+  outdir = NULL,
   subjid,
   verbose = TRUE,
   opts = "-all"
@@ -30,10 +30,15 @@ reconner <- function(
   } else {
     in_opts = ""
   }
+  if (!is.null(outdir)) {
+    sd_opts = paste0(" -sd ", shQuote(outdir))
+  } else {
+    sd_opts = ""
+  }
   
   opts = paste(
     in_opts,
-    paste0(" -sd ", shQuote(outdir)),
+    sd_opts,
     paste0(" -subjid ", subjid),
     opts)
   

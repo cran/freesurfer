@@ -23,6 +23,7 @@
 #' @export
 #' @examples 
 #' if (have_fs()) {
+#'    fs_subj_dir()
 #'    outfile = aparcstats2table(subjects = "bert",
 #'                     hemi = "lh",
 #'                     meas = "thickness")
@@ -132,33 +133,8 @@ aparcstats2table = function(
   cmd = paste(cmd, args)
   cmd = paste(cmd, opts)
   
-  fe_before = file.exists(outfile)
-  if (verbose) {
-    message(cmd, "\n")
-  }  
-  res = system(cmd)
-  fe_after = file.exists(outfile)
-
-  if (res != 0 & !fe_after) {
-    stop("Command Failed, no output produced")
-  }
-  if (res != 0 & fe_after & fe_before) {
-    warning(paste0(
-      " Command aparcstats2table ", 
-      "had non-zero exit status (probably failed),",
-      " outfile exists but existed before command was run. ",
-      " Please check output.")
-    )
-  }  
+  run_check_fs_cmd(cmd = cmd, outfile = outfile, verbose = verbose)
   
-  if (res != 0 & fe_after & !fe_before) {
-    warning(paste0(
-      " Command aparcstats2table ", 
-      "had non-zero exit status (probably failed),",
-      " outfile exists and did NOT before command was run. ",
-      " Please check output.")
-    )
-  }  
   attr(outfile, "separator") = sep
   return(outfile)
 }

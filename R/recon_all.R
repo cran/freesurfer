@@ -23,5 +23,5 @@ recon_all <- function(
            outdir = outdir,
            subjid = subjid,
            verbose = verbose,
-           opts = "-all")
+           opts = opts)
 }

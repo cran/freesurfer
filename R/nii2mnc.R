@@ -6,7 +6,7 @@
 #' @return Character filename of output
 #' @importFrom tools file_ext 
 #' @importFrom R.utils gzip gunzip
-#' @importFrom fslr checknii
+#' @importFrom neurobase checknii
 #' @export
 #' @examples 
 #' if (have_fs()) {
@@ -17,7 +17,7 @@
 nii2mnc = function(
   file, 
   outfile = NULL){
-  file = fslr::checknii(file)
+  file = neurobase::checknii(file)
   # file = checkimg(file, gzipped = FALSE)
   # ext = file_ext(tolower(file))
   # if (ext %in% "gz") {
@@ -39,7 +39,8 @@ nii2mnc = function(
     outfile = outfile,
     retimg = FALSE,
     samefile = FALSE,
-    add_ext = FALSE)
+    add_ext = FALSE,
+    bin_app = "mni/bin")
   if (!file.exists(outfile)) {
     stop("nii2mnc did not produce outfile specified")
   }
@@ -47,11 +48,11 @@ nii2mnc = function(
 }
 
 
-#' @title onvert NIfTI to MNC Help
+#' @title Convert NIfTI to MNC Help
 #' @description This calls Freesurfer's \code{mnc2nii} help 
 #'
 #' @return Result of \code{fs_help}
 #' @export
 nii2mnc.help = function(){
-  fs_help(func_name = "nii2mnc", help.arg = "")
+  fs_help(func_name = "nii2mnc", help.arg = "", bin_app = "mni/bin")
 }
