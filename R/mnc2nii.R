@@ -11,7 +11,8 @@
 #' if (have_fs()) {
 #'    img = oro.nifti::nifti(array(rnorm(5*5*5), dim = c(5,5,5)))  
 #'    mnc = nii2mnc(img)
-#'    img_file = mnc2nii(mnc)
+#'    img_file = mnc2nii(mnc, outfile = tempfile(fileext = ".nii"))
+#'    neurobase::readnii(img_file, verbose = TRUE)
 #' }
 mnc2nii = function(file, 
                    outfile = NULL){
@@ -25,10 +26,19 @@ mnc2nii = function(file,
     file = file,
     outfile = outfile,
     retimg = FALSE,
-    frontopts = "",
+    frontopts = "-float",
     samefile = FALSE,
     add_ext = FALSE,
     bin_app = "mni/bin")
+  if (!file.exists(outfile)) {
+    real_outfile = outfile
+    outfile = paste0(outfile, ".nii")
+    if (!file.exists(outfile)) {
+      stop("mnc2nii did not produce outfile specified")
+    }    
+    file.copy(outfile, real_outfile, overwrite = TRUE)
+    outfile = real_outfile
+  }
   if (out_ext %in% "gz") {
     outfile = gzip(outfile, 
                    remove = TRUE, 
