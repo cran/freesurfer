@@ -1,7 +1,7 @@
 Package: freesurfer
 Type: Package
 Title: Wrapper Functions for 'Freesurfer'
-Version: 1.6.1
+Version: 1.6.5
 Author: John Muschelli <muschellij2@gmail.com>
 Maintainer: John Muschelli <muschellij2@gmail.com>
 Description: Wrapper functions that interface with 'Freesurfer' 
@@ -13,17 +13,17 @@ Description: Wrapper functions that interface with 'Freesurfer'
     command and returns an R object of class 'nifti' or necessary output.
 LazyData: true
 LazyLoad: true
-Imports: methods, neurobase, tools, R.utils, reshape2
+Imports: methods, neurobase, tools, R.utils, reshape2, utils
 Depends: R (>= 3.2.0)
 License: GPL-3
 Suggests: magrittr, knitr, oro.nifti (>= 0.7), rgl, rmarkdown, pander,
         fslr (>= 2.9.2)
 BugReports: https://github.com/muschellij2/freesurfer/issues
 SystemRequirements: Freesurfer (https://surfer.nmr.mgh.harvard.edu/)
-RoxygenNote: 6.0.1.9000
+RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 Encoding: UTF-8
 NeedsCompilation: no
-Packaged: 2017-10-10 00:38:33 UTC; johnmuschelli
+Packaged: 2019-07-16 04:50:21 UTC; johnmuschelli
 Repository: CRAN
-Date/Publication: 2017-10-10 14:20:36 UTC
+Date/Publication: 2019-07-18 06:35:19 UTC

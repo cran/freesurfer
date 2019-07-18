@@ -9,12 +9,12 @@ recon(infile, outdir = NULL, subjid, motioncor = TRUE,
   skullstrip = TRUE, gcareg = TRUE, canorm = TRUE, careg = TRUE,
   rmneck = TRUE, skull_lta = TRUE, calabel = TRUE,
   normalization2 = TRUE, segmentation = TRUE, fill = TRUE,
-  tessellate = TRUE, smooth1 = TRUE, inflate1 = TRUE, qsphere = TRUE,
-  fix = TRUE, finalsurfs = TRUE, smooth2 = TRUE, inflate2 = TRUE,
-  cortribbon = TRUE, sphere = TRUE, surfreg = TRUE,
-  contrasurfreg = TRUE, avgcurv = TRUE, cortparc = TRUE,
-  parcstats = TRUE, cortparc2 = TRUE, parcstats2 = TRUE,
-  aparc2aseg = TRUE, verbose = TRUE, opts = "")
+  tessellate = TRUE, smooth1 = TRUE, inflate1 = TRUE,
+  qsphere = TRUE, fix = TRUE, finalsurfs = TRUE, smooth2 = TRUE,
+  inflate2 = TRUE, cortribbon = TRUE, sphere = TRUE,
+  surfreg = TRUE, contrasurfreg = TRUE, avgcurv = TRUE,
+  cortparc = TRUE, parcstats = TRUE, cortparc2 = TRUE,
+  parcstats2 = TRUE, aparc2aseg = TRUE, verbose = TRUE, opts = "")
 }
 \arguments{
 \item{infile}{Input filename (dcm or nii)}
@@ -131,7 +131,7 @@ topology fixer will create the surface ?h.orig.}
 
 \item{cortparc}{Assigns a neuroanatomical label to each location on the cortical surface. Incorporates both geometric information derived from the cortical model (sulcus and curvature), and neuroanatomical convention. Calls mris_ca_label. -cortparc creates label/?h.aparc.annot, and -cortparc2 creates /label/?h.aparc.a2005s.annot.}
 
-\item{parcstats}{Runs mris_anatomical_stats to create a summary table of cortical parcellation statistics for each structure, including 1. structure name 2. number of vertices 3. total surface area (mm2) 4. total gray matter volume (mm3) 5. average cortical thickness (mm) 6. standard error of cortical thicknessr (mm) 7. integrated rectified mean curvature 8. integrated rectified Gaussian curvature 9. folding index 10. intrinsic curvature index. For -parcstats, the file is saved in stats/?h.aparc.stats. For -parcstats2, the file is saved in stats/?h.aparc.a2005s.stats.}
+\item{parcstats}{Runs mris_anatomical_stats to create a summary table of cortical parcellation statistics for each structure, including 1. structure name 2. number of vertices 3. total surface area (mm2) 4. total gray matter volume (mm3) 5. average cortical thickness (mm) 6. standard error of cortical thickness (mm) 7. integrated rectified mean curvature 8. integrated rectified Gaussian curvature 9. folding index 10. intrinsic curvature index. For -parcstats, the file is saved in stats/?h.aparc.stats. For -parcstats2, the file is saved in stats/?h.aparc.a2005s.stats.}
 
 \item{cortparc2}{see cortparc argument}
 
