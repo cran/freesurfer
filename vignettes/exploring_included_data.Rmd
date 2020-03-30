@@ -148,16 +148,24 @@ Note, the image is not stored in the right/posterior/inferior (RPI) orientation 
 
 ```{r reorient_show, echo = TRUE, eval = FALSE}
 if (have_fs()) {
-  L = fslr::rpi_orient(img)
-  reoriented_img = L[["img"]]
+  if (fslr::have_fsl()) {
+    L = fslr::rpi_orient(img)
+    reoriented_img = L[["img"]]
+  } else {
+    reoriented_img = img
+  }
 }
 ```
 
 ```{r reorient, echo = FALSE, eval = TRUE}
 if (have_fs()) {
-  L = fslr::rpi_orient(img)
-  reoriented_img = L$img
-  rm(list = "L")
+  if (fslr::have_fsl()) {
+    L = fslr::rpi_orient(img)
+    reoriented_img = L$img
+    rm(list = "L")
+  } else {
+    reoriented_img = img
+  }
 }
 ```
 
@@ -256,7 +264,11 @@ if (have_fs()) {
   # in mri_watershed, which is the default
   # so you reorient after
   #########################################
-  L = fslr::rpi_orient(ss)
+  if (fslr::have_fsl()) {
+    L = fslr::rpi_orient(ss)
+  } else {
+    L = list(img = ss)
+  }
   re_ss_img = L$img
   ortho2(re_ss_img, mask = re_ss_img)
   mask = re_ss_img > 0
@@ -273,7 +285,7 @@ if (have_fs()) {
 }
 ```
 
-```{r mask_run, echo = FALSE, eval = TRUE, dependson="watershed"}
+```{r mask_run, echo = FALSE, eval = FALSE, dependson="watershed"}
 if (have_fs()) {
   writenii(mask, "mask.nii.gz")
 }
@@ -309,7 +321,11 @@ if (have_fs()) {
   seg_file = file = file.path(fs_subj_dir(), 
                               "bert", "mri", "aseg.mgz")
   seg = readmgz(seg_file)
-  L = fslr::rpi_orient(seg)
+  if (fslr::have_fsl()) {
+    L = fslr::rpi_orient(seg)
+  } else {
+    L = list(img = seg)
+  }
   seg = L$img
   breaks = c(-1, fs_lut$index)
   colors = rgb(fs_lut$R, fs_lut$G, fs_lut$B,

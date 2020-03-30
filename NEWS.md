@@ -1,3 +1,12 @@
+# freesurfer 1.6.7
+
+* Trying to fix `source` vs `.` when using Linux machines.
+* Added checks for FSL in vignette.
+
+# freesurfer 1.6.6
+
+* Added `read_annotation` for reading annotation files.
+
 # freesurfer 1.6.5
 
 * Added some workarounds from the examples for different freesurfer versions.

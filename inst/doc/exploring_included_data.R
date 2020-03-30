@@ -1,4 +1,4 @@
-## ----setup, echo = FALSE, message = FALSE, warning = FALSE---------------
+## ----setup, echo = FALSE, message = FALSE, warning = FALSE--------------------
 library(knitr)
 opts_chunk$set(
   eval = FALSE,
@@ -15,18 +15,18 @@ library(pander)
 library(neurobase)
 library(rgl)
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  recon_all(infile, outdir, subjid)
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  recon_all(infile = "/path/to/T1.nii", subjid = "bert")
 
-## ---- eval = TRUE, warning=FALSE, results='markup'-----------------------
+## ---- eval = TRUE, warning=FALSE, results='markup'----------------------------
 if (have_fs()) {
   list.files(path  = file.path(fs_subj_dir(), "bert"))
 }
 
-## ----mri_convert, echo = TRUE, eval = TRUE-------------------------------
+## ----mri_convert, echo = TRUE, eval = TRUE------------------------------------
 if (have_fs()) {
   library(freesurfer)
   bert_dir = file.path(fs_subj_dir(), "bert") # subject directory
@@ -36,7 +36,7 @@ if (have_fs()) {
   img = neurobase::readnii(t1_nii_fname) # read in outputs
 }
 
-## ----comp_mri, echo = TRUE, eval = TRUE, results='markup'----------------
+## ----comp_mri, echo = TRUE, eval = TRUE, results='markup'---------------------
 if (have_fs()) {
   img_mgz = readmgz(t1_mgz)
   identical(img, img_mgz)
@@ -47,17 +47,25 @@ if (have_fs()) {
   neurobase::ortho2(img, add.orient = FALSE, mask = img > 40)
 }
 
-## ----reorient_show, echo = TRUE, eval = FALSE----------------------------
+## ----reorient_show, echo = TRUE, eval = FALSE---------------------------------
 #  if (have_fs()) {
-#    L = fslr::rpi_orient(img)
-#    reoriented_img = L[["img"]]
+#    if (fslr::have_fsl()) {
+#      L = fslr::rpi_orient(img)
+#      reoriented_img = L[["img"]]
+#    } else {
+#      reoriented_img = img
+#    }
 #  }
 
-## ----reorient, echo = FALSE, eval = TRUE---------------------------------
+## ----reorient, echo = FALSE, eval = TRUE--------------------------------------
 if (have_fs()) {
-  L = fslr::rpi_orient(img)
-  reoriented_img = L$img
-  rm(list = "L")
+  if (fslr::have_fsl()) {
+    L = fslr::rpi_orient(img)
+    reoriented_img = L$img
+    rm(list = "L")
+  } else {
+    reoriented_img = img
+  }
 }
 
 ## ----mri_plot2, echo = TRUE, eval = TRUE, dependson='reorient', fig.cap="Plot of T1-weighted image from bert subject in Freesurfer after re-orientation to RPI orientation.  Note, the letters denote the orientation of right/left (R/L), posterior/anterior (P/A), inferior/superior (I/S). "----
@@ -90,7 +98,7 @@ if (have_fs()) {
   double_ortho(nu_from_mnc, bias_field, col.y = hotmetal(), mask = nu_from_mnc > 40)
 }
 
-## ----nu_correct_nifti_show, echo = TRUE, eval = FALSE--------------------
+## ----nu_correct_nifti_show, echo = TRUE, eval = FALSE-------------------------
 #  if (have_fs()) {
 #    nu_masked = nu_correct(file = reoriented_img, mask = mask)
 #  }
@@ -101,12 +109,12 @@ if (have_fs()) {
 #    rm(list = c("nu_masked", "mask"))
 #  }
 
-## ----watershed, echo = FALSE, eval = TRUE, dependson="mri_convert"-------
+## ----watershed, echo = FALSE, eval = TRUE, dependson="mri_convert"------------
 if (have_fs()) {
   ss = mri_watershed(img)
 }
 
-## ----watershed_plot_show, echo = TRUE, eval = FALSE----------------------
+## ----watershed_plot_show, echo = TRUE, eval = FALSE---------------------------
 #  if (have_fs()) {
 #    ss = mri_watershed(img)
 #    ortho2(ss, mask = ss)
@@ -119,29 +127,33 @@ if (have_fs()) {
   # in mri_watershed, which is the default
   # so you reorient after
   #########################################
-  L = fslr::rpi_orient(ss)
+  if (fslr::have_fsl()) {
+    L = fslr::rpi_orient(ss)
+  } else {
+    L = list(img = ss)
+  }
   re_ss_img = L$img
   ortho2(re_ss_img, mask = re_ss_img)
   mask = re_ss_img > 0
   rm(list = c("L"))
 }
 
-## ----mask_show, echo = TRUE, eval = FALSE, dependson="watershed"---------
+## ----mask_show, echo = TRUE, eval = FALSE, dependson="watershed"--------------
 #  if (have_fs()) {
 #    mask = ss > 0
 #  }
 
-## ----mask_run, echo = FALSE, eval = TRUE, dependson="watershed"----------
-if (have_fs()) {
-  writenii(mask, "mask.nii.gz")
-}
+## ----mask_run, echo = FALSE, eval = FALSE, dependson="watershed"--------------
+#  if (have_fs()) {
+#    writenii(mask, "mask.nii.gz")
+#  }
 
-## ----fs_lut, echo=TRUE, eval = TRUE, results='markup'--------------------
+## ----fs_lut, echo=TRUE, eval = TRUE, results='markup'-------------------------
 if (have_fs()) {
   head(freesurfer::fs_lut, 3)
 }
 
-## ----seg_file_show, echo = TRUE, eval = FALSE----------------------------
+## ----seg_file_show, echo = TRUE, eval = FALSE---------------------------------
 #  if (have_fs()) {
 #    seg_file = file = file.path(fs_subj_dir(), "bert", "mri", "aseg.mgz")
 #    seg = readmgz(seg_file)
@@ -156,7 +168,11 @@ if (have_fs()) {
   seg_file = file = file.path(fs_subj_dir(), 
                               "bert", "mri", "aseg.mgz")
   seg = readmgz(seg_file)
-  L = fslr::rpi_orient(seg)
+  if (fslr::have_fsl()) {
+    L = fslr::rpi_orient(seg)
+  } else {
+    L = list(img = seg)
+  }
   seg = L$img
   breaks = c(-1, fs_lut$index)
   colors = rgb(fs_lut$R, fs_lut$G, fs_lut$B,
@@ -169,24 +185,24 @@ if (have_fs()) {
   rm(list = c("L", "colors", "breaks"))
 }
 
-## ----read_aseg_stats, eval = TRUE, results='markup'----------------------
+## ----read_aseg_stats, eval = TRUE, results='markup'---------------------------
 if (have_fs()) {
   file = file.path(fs_subj_dir(), "bert", "stats", "aseg.stats")
   out = read_aseg_stats(file)
   names(out)
 }
 
-## ----read_aseg_stats_meas, echo = TRUE, eval = TRUE, results='markup'----
+## ----read_aseg_stats_meas, echo = TRUE, eval = TRUE, results='markup'---------
 if (have_fs()) {
   head(out$measures[, c("meaning", "value", "units")], n = 3)
 }
 
-## ----read_aseg_stats_struct, echo = TRUE, eval = TRUE, results='markup'----
+## ----read_aseg_stats_struct, echo = TRUE, eval = TRUE, results='markup'-------
 if (have_fs()) {
   head(out$structures, n = 3)
 }
 
-## ----rgl_plot_show, cache=FALSE, eval = FALSE, echo = TRUE---------------
+## ----rgl_plot_show, cache=FALSE, eval = FALSE, echo = TRUE--------------------
 #  if (have_fs()) {
 #    right_file = file.path(fs_subj_dir(),
 #                     "bert", "surf", "rh.pial")
@@ -201,7 +217,7 @@ if (have_fs()) {
 #                       color = rainbow(nrow(left_triangles)))
 #  }
 
-## ----rgl_plot, cache = TRUE, eval = TRUE, echo = FALSE-------------------
+## ----rgl_plot, cache = TRUE, eval = TRUE, echo = FALSE------------------------
 if (have_fs()) {
     # rgl_out_file = "muschelli_files/figure-latex/rgl_plot_out.png"
   # if (!file.exists(rgl_out_file)) {
@@ -228,7 +244,7 @@ if (have_fs()) {
   # }
 }
 
-## ----read_label, eval = TRUE, results='markup'---------------------------
+## ----read_label, eval = TRUE, results='markup'--------------------------------
 if (have_fs()) {
   file = file.path(fs_subj_dir(), "bert", "label", "lh.cortex.label")
   out = read_fs_label(file)
