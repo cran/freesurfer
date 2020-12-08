@@ -1,6 +1,6 @@
 ## ----setup, echo = FALSE, message = FALSE, warning = FALSE--------------------
 library(knitr)
-opts_chunk$set(
+knitr::opts_chunk$set(
   eval = FALSE,
   echo = TRUE, 
   prompt = FALSE, 
@@ -14,6 +14,7 @@ library(freesurfer)
 library(pander)
 library(neurobase)
 library(rgl)
+have_fs = have_fs(check_license = TRUE)
 
 ## ----eval = FALSE-------------------------------------------------------------
 #  recon_all(infile, outdir, subjid)
@@ -27,8 +28,8 @@ if (have_fs()) {
 }
 
 ## ----mri_convert, echo = TRUE, eval = TRUE------------------------------------
+library(freesurfer)
 if (have_fs()) {
-  library(freesurfer)
   bert_dir = file.path(fs_subj_dir(), "bert") # subject directory
   t1_mgz = file.path(bert_dir, "mri", "T1.mgz") # mgz file
   t1_nii_fname = tempfile(fileext = ".nii.gz") # temporary NIfTI file
@@ -48,8 +49,13 @@ if (have_fs()) {
 }
 
 ## ----reorient_show, echo = TRUE, eval = FALSE---------------------------------
+#  if (requireNamespace("fslr", quietly = TRUE)) {
+#    fsl_check = fslr::have_fsl()
+#  } else {
+#    fsl_check = FALSE
+#  }
 #  if (have_fs()) {
-#    if (fslr::have_fsl()) {
+#    if (fsl_check) {
 #      L = fslr::rpi_orient(img)
 #      reoriented_img = L[["img"]]
 #    } else {
@@ -58,8 +64,13 @@ if (have_fs()) {
 #  }
 
 ## ----reorient, echo = FALSE, eval = TRUE--------------------------------------
+if (requireNamespace("fslr", quietly = TRUE)) {
+  fsl_check = fslr::have_fsl()
+} else {
+  fsl_check = FALSE
+}
 if (have_fs()) {
-  if (fslr::have_fsl()) {
+  if (fsl_check) {
     L = fslr::rpi_orient(img)
     reoriented_img = L$img
     rm(list = "L")
@@ -127,7 +138,7 @@ if (have_fs()) {
   # in mri_watershed, which is the default
   # so you reorient after
   #########################################
-  if (fslr::have_fsl()) {
+  if (fsl_check) {
     L = fslr::rpi_orient(ss)
   } else {
     L = list(img = ss)
@@ -168,7 +179,7 @@ if (have_fs()) {
   seg_file = file = file.path(fs_subj_dir(), 
                               "bert", "mri", "aseg.mgz")
   seg = readmgz(seg_file)
-  if (fslr::have_fsl()) {
+  if (fsl_check) {
     L = fslr::rpi_orient(seg)
   } else {
     L = list(img = seg)
