@@ -1,7 +1,7 @@
 Package: freesurfer
 Type: Package
 Title: Wrapper Functions for 'Freesurfer'
-Version: 1.6.8
+Version: 1.6.10
 Authors@R: c(
     person(given = "John",
            family = "Muschelli",
@@ -29,13 +29,13 @@ Suggests: magrittr, knitr, oro.nifti (>= 0.7), rgl, rmarkdown, pander,
 BugReports: https://github.com/muschellij2/freesurfer/issues
 SystemRequirements: FSL, Freesurfer
         (https://surfer.nmr.mgh.harvard.edu/)
-RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 Encoding: UTF-8
+RoxygenNote: 7.3.1
 NeedsCompilation: no
-Packaged: 2020-12-08 19:09:57 UTC; johnmuschelli
+Packaged: 2024-05-13 16:40:35 UTC; johnmuschelli
 Author: John Muschelli [aut, cre] (<https://orcid.org/0000-0001-6469-1750>),
   Athanasia Mo Mowinckel [ctb] (<https://orcid.org/0000-0002-5756-0223>)
 Maintainer: John Muschelli <muschellij2@gmail.com>
 Repository: CRAN
-Date/Publication: 2020-12-08 20:30:07 UTC
+Date/Publication: 2024-05-14 09:30:07 UTC

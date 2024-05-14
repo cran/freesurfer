@@ -19,10 +19,10 @@ have_fs = have_fs(check_license = TRUE)
 ## ----eval = FALSE-------------------------------------------------------------
 #  recon_all(infile, outdir, subjid)
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  recon_all(infile = "/path/to/T1.nii", subjid = "bert")
 
-## ---- eval = TRUE, warning=FALSE, results='markup'----------------------------
+## ----eval = TRUE, warning=FALSE, results='markup'-----------------------------
 if (have_fs()) {
   list.files(path  = file.path(fs_subj_dir(), "bert"))
 }
