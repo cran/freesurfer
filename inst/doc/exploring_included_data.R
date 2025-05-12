@@ -17,10 +17,10 @@ library(rgl)
 have_fs = have_fs(check_license = TRUE)
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  recon_all(infile, outdir, subjid)
+# recon_all(infile, outdir, subjid)
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  recon_all(infile = "/path/to/T1.nii", subjid = "bert")
+# recon_all(infile = "/path/to/T1.nii", subjid = "bert")
 
 ## ----eval = TRUE, warning=FALSE, results='markup'-----------------------------
 if (have_fs()) {
@@ -49,19 +49,19 @@ if (have_fs()) {
 }
 
 ## ----reorient_show, echo = TRUE, eval = FALSE---------------------------------
-#  if (requireNamespace("fslr", quietly = TRUE)) {
-#    fsl_check = fslr::have_fsl()
-#  } else {
-#    fsl_check = FALSE
-#  }
-#  if (have_fs()) {
-#    if (fsl_check) {
-#      L = fslr::rpi_orient(img)
-#      reoriented_img = L[["img"]]
-#    } else {
-#      reoriented_img = img
-#    }
-#  }
+# if (requireNamespace("fslr", quietly = TRUE)) {
+#   fsl_check = fslr::have_fsl()
+# } else {
+#   fsl_check = FALSE
+# }
+# if (have_fs()) {
+#   if (fsl_check) {
+#     L = fslr::rpi_orient(img)
+#     reoriented_img = L[["img"]]
+#   } else {
+#     reoriented_img = img
+#   }
+# }
 
 ## ----reorient, echo = FALSE, eval = TRUE--------------------------------------
 if (requireNamespace("fslr", quietly = TRUE)) {
@@ -91,10 +91,10 @@ if (have_fs()) {
 }
 
 ## ----nu_correct_mcn2nii_show, echo = TRUE, eval = FALSE,  dependson="reorient", results='markup'----
-#  if (have_fs()) {
-#    nu_from_mnc = nu_correct(file = mnc)
-#    class(nu_from_mnc)
-#  }
+# if (have_fs()) {
+#   nu_from_mnc = nu_correct(file = mnc)
+#   class(nu_from_mnc)
+# }
 
 ## ----nu_correct_mcn2nii_run, echo = FALSE, eval = TRUE,  dependson="reorient", results='markup'----
 if (have_fs()) {
@@ -110,15 +110,15 @@ if (have_fs()) {
 }
 
 ## ----nu_correct_nifti_show, echo = TRUE, eval = FALSE-------------------------
-#  if (have_fs()) {
-#    nu_masked = nu_correct(file = reoriented_img, mask = mask)
-#  }
+# if (have_fs()) {
+#   nu_masked = nu_correct(file = reoriented_img, mask = mask)
+# }
 
 ## ----nu_correct_nifti, echo = FALSE, eval = FALSE, results='markup', dependson=c("watershed_plot", "reorient")----
-#  if (have_fs()) {
-#    nu_masked = nu_correct(file = reoriented_img, mask = mask)
-#    rm(list = c("nu_masked", "mask"))
-#  }
+# if (have_fs()) {
+#   nu_masked = nu_correct(file = reoriented_img, mask = mask)
+#   rm(list = c("nu_masked", "mask"))
+# }
 
 ## ----watershed, echo = FALSE, eval = TRUE, dependson="mri_convert"------------
 if (have_fs()) {
@@ -126,10 +126,10 @@ if (have_fs()) {
 }
 
 ## ----watershed_plot_show, echo = TRUE, eval = FALSE---------------------------
-#  if (have_fs()) {
-#    ss = mri_watershed(img)
-#    ortho2(ss, mask = ss)
-#  }
+# if (have_fs()) {
+#   ss = mri_watershed(img)
+#   ortho2(ss, mask = ss)
+# }
 
 ## ----watershed_plot, echo = FALSE, eval = TRUE, dependson="watershed", fig.cap="Brain-extracted image after using Freesurfer \\code{mri\\_watershed} algorithm.  We see that the areas outside of the brain have been removed from the image."----
 if (have_fs()) {
@@ -150,14 +150,14 @@ if (have_fs()) {
 }
 
 ## ----mask_show, echo = TRUE, eval = FALSE, dependson="watershed"--------------
-#  if (have_fs()) {
-#    mask = ss > 0
-#  }
+# if (have_fs()) {
+#   mask = ss > 0
+# }
 
 ## ----mask_run, echo = FALSE, eval = FALSE, dependson="watershed"--------------
-#  if (have_fs()) {
-#    writenii(mask, "mask.nii.gz")
-#  }
+# if (have_fs()) {
+#   writenii(mask, "mask.nii.gz")
+# }
 
 ## ----fs_lut, echo=TRUE, eval = TRUE, results='markup'-------------------------
 if (have_fs()) {
@@ -165,13 +165,13 @@ if (have_fs()) {
 }
 
 ## ----seg_file_show, echo = TRUE, eval = FALSE---------------------------------
-#  if (have_fs()) {
-#    seg_file = file = file.path(fs_subj_dir(), "bert", "mri", "aseg.mgz")
-#    seg = readmgz(seg_file)
-#    breaks = c(-1, fs_lut$index)
-#    colors = rgb(fs_lut$R, fs_lut$G, fs_lut$B, alpha = 255/2, maxColorValue = 255)
-#    ortho2(ss, seg, col.y = colors, ybreaks = breaks)
-#  }
+# if (have_fs()) {
+#   seg_file = file = file.path(fs_subj_dir(), "bert", "mri", "aseg.mgz")
+#   seg = readmgz(seg_file)
+#   breaks = c(-1, fs_lut$index)
+#   colors = rgb(fs_lut$R, fs_lut$G, fs_lut$B, alpha = 255/2, maxColorValue = 255)
+#   ortho2(ss, seg, col.y = colors, ybreaks = breaks)
+# }
 
 ## ----seg_file, echo = FALSE, eval = TRUE, dependson="watershed_plot", fig.cap="Overlay of segmentation from Freesurfer \\code{recon-all} command.  "----
 
@@ -214,19 +214,19 @@ if (have_fs()) {
 }
 
 ## ----rgl_plot_show, cache=FALSE, eval = FALSE, echo = TRUE--------------------
-#  if (have_fs()) {
-#    right_file = file.path(fs_subj_dir(),
-#                     "bert", "surf", "rh.pial")
-#    right_triangles = surface_to_triangles(infile = right_file)
-#    left_file = file.path(fs_subj_dir(),
-#                       "bert", "surf", "lh.pial")
-#    left_triangles = surface_to_triangles(infile = left_file)
-#    rgl::rgl.open()
-#    rgl::rgl.triangles(right_triangles,
-#                       color = rainbow(nrow(right_triangles)))
-#    rgl::rgl.triangles(left_triangles,
-#                       color = rainbow(nrow(left_triangles)))
-#  }
+# if (have_fs()) {
+#   right_file = file.path(fs_subj_dir(),
+#                    "bert", "surf", "rh.pial")
+#   right_triangles = surface_to_triangles(infile = right_file)
+#   left_file = file.path(fs_subj_dir(),
+#                      "bert", "surf", "lh.pial")
+#   left_triangles = surface_to_triangles(infile = left_file)
+#   rgl::rgl.open()
+#   rgl::rgl.triangles(right_triangles,
+#                      color = rainbow(nrow(right_triangles)))
+#   rgl::rgl.triangles(left_triangles,
+#                      color = rainbow(nrow(left_triangles)))
+# }
 
 ## ----rgl_plot, cache = TRUE, eval = TRUE, echo = FALSE------------------------
 if (have_fs()) {
